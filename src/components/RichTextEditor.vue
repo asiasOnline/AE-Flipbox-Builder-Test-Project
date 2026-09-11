@@ -27,6 +27,7 @@
       </button>
         <button
         type="button"
+        :aria-pressed="editor?.isActive('bold') ?? false"
         @click="editor?.chain().focus().toggleBold().run()"
         v-tooltip="'Bold (Ctrl/Cmd+B)'"
       >
@@ -80,7 +81,7 @@
 
 <script setup>
 import { onBeforeUnmount, watch } from 'vue';
-import { Editor, EditorContent } from '@tiptap/vue-3';
+import { useEditor, EditorContent } from '@tiptap/vue-3';
 import StarterKit from '@tiptap/starter-kit';
 
 const props = defineProps({
@@ -91,10 +92,7 @@ const props = defineProps({
 });
 const emit = defineEmits(['update:modelValue']);
 
-// StarterKit includes bold, italic, bullet list, ordered list,
-// undo/redo (via history), paragraphs, and more. You likely won't need
-// to add extensions for the required formatting, but you're free to.
-const editor = new Editor({
+const editor = useEditor({
   extensions: [StarterKit],
   content: props.modelValue,
   onUpdate: ({ editor: currentEditor }) => {
@@ -102,21 +100,16 @@ const editor = new Editor({
   },
 });
 
-// Keeps the editor in sync if modelValue is changed from outside this
-// component (for example, loaded from storage after a refresh).
 watch(
   () => props.modelValue,
   value => {
-    const isSame = value === editor.getHTML();
+    if (!editor.value) returnl
+    const isSame = value === editor.value.getHTML();
     if (!isSame) {
-      editor.commands.setContent(value || '', false);
+      editor.value.commands.setContent(value || '', { emitUpdate: false });
     }
   },
 );
-
-onBeforeUnmount(() => {
-  editor.destroy();
-});
 
 defineExpose({ editor });
 </script>
@@ -135,6 +128,27 @@ defineExpose({ editor });
   border-bottom: 1px solid #d0d7de;
 }
 
+.toolbar button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 6px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  background: transparent;
+  cursor: pointer;
+  color: inherit;
+}
+
+.toolbar button:hover {
+  background: #f6f8fa;
+}
+
+.toolbar button[aria-pressed='true'] {
+  background: #ddf4ff;
+  border-color: #54aeff;
+}
+
 .editor-content {
   padding: 10px;
   min-height: 120px;
@@ -148,5 +162,33 @@ defineExpose({ editor });
 .editor-content :deep(ol) {
   margin: 0 0 8px;
   padding-left: 24px;
+}
+
+.editor-content :deep(ul) {
+  list-style-type: disc;
+}
+
+.editor-content :deep(ol) {
+  list-style-type: decimal;
+}
+
+.editor-content :deep(li) {
+  list-style: inherit;
+}
+
+.editor-content :deep(ul ul) {
+  list-style-type: circle;
+}
+
+.editor-content :deep(ul ul ul) {
+  list-style-type: square;
+}
+
+.editor-content :deep(.ProseMirror) {
+  outline: none;
+}
+
+.editor-content :deep(.ProseMirror:focus-visible) {
+  outline: none;
 }
 </style>

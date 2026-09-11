@@ -1,77 +1,70 @@
 <template>
   <div class="flipbox-preview">
     <!--
-      TODO: Build the flip interaction here.
-      - Show the front of the flipbox by default and let the user reveal
-        the back.
-      - Let the user flip back and forth between front and back.
-      - Reflect the builder content and formatting accurately (this
-        component already receives live updates via the `flipbox` prop).
-      - Communicate the current side (front or back) in a way that does
-        not rely only on the visual flip animation - think about both
-        sighted users who might miss the animation and screen reader
-        users.
-
-      The markup below is only a placeholder showing the front content.
-      Replace it with your flipbox structure and interaction.
+      - Flip interaction integrated with front of card displayed initially
+      - Dynamic button to let user flip card back and forth
+      - Builder content and formatting maintained via live updates
+      - The current card side is communicated 
+      - Checkbox is also incorporated allowing users to toggle single versus dual view of front and back of the card
     -->
-    <div class="preview-controls">
-      <label class="toggle">
+    <div class="self-start">
+      <label class="flex cursor-pointer select-none items-center gap-2">
         <input type="checkbox" v-model="showBothSides" />
-        Show both sides
+        Show both sides of card
       </label>
     </div>
 
     <!-- Both sides at once -->
-    <div v-if="showBothSides" class="both-sides">
+    <div v-if="showBothSides" class="flex flex-col items-center gap-3">
       <div>
-        <h4 id="front-label">Front</h4>
-        <div class="flipbox">
-          <div class="flipbox-content">
-            <div v-if="hasFront" v-html="flipbox.front"></div>
-            <p v-else class="empty">Nothing on the front yet.</p>
-          </div>
+        <h4 class="mb-2 font-semibold">Front</h4>
+        <div class="flipbox-content w-70 min-h-45 rounded-lg border border-[#d0d7de] bg-white p-4">
+          <div v-if="hasFront" v-html="flipbox.front"></div>
+          <p v-else class="m-0 italic opacity-55">Nothing on the front yet.</p>
         </div>
       </div>
 
       <div>
-        <h4 id="back-label">Back</h4>
-        <div class="flipbox">
-          <div class="flipbox-content">
-            <div v-if="hasBack" v-html="flipbox.back"></div>
-            <p v-else class="empty">Nothing on the back yet.</p>
-          </div>
+        <h4 class="mb-2 font-semibold">Back</h4>
+        <div class="flipbox-content w-70 min-h-45 rounded-lg border border-[#d0d7de] bg-white p-4">
+          <div v-if="hasBack" v-html="flipbox.back"></div>
+          <p v-else class="m-0 italic opacity-55">Nothing on the back yet.</p>
         </div>
       </div>
     </div>
 
     <!-- One side at a time -->
-    <div v-else class="single-side">
-      <h4 class="side-indicator">
-        Showing: {{ isFlipped ? 'Back' : 'Front' }}
+    <div v-else class="flex flex-col items-center gap-3">
+      <h4 class="m-0 font-semibold">
+        {{ isFlipped ? 'Back' : 'Front' }}
       </h4>
 
-      <div class="scene" @click="toggleFlip">
-        <div class="flipbox-card" :class="{ 'is-flipped': isFlipped }">
-          <div class="flipbox face-front" :aria-hidden="isFlipped">
-            <div class="flipbox-content">
-              <div v-if="hasFront" v-html="flipbox.front"></div>
-              <p v-else class="empty">Nothing on the front yet.</p>
-            </div>
+      <div class="cursor-pointer perspective-[1000px]" @click="toggleFlip">
+        <div
+          class="grid transform-3d transition-transform duration-500 ease-in-out motion-reduce:transition-none"
+          :class="isFlipped ? 'rotate-y-180' : 'rotate-y-0'"
+        >
+          <div
+            class="flipbox-content col-start-1 row-start-1 w-70 min-h-45 rounded-lg border border-[#d0d7de] bg-white p-4 backface-hidden"
+            :aria-hidden="isFlipped"
+          >
+            <div v-if="hasFront" v-html="flipbox.front"></div>
+            <p v-else class="m-0 italic opacity-55">Nothing on the front yet.</p>
           </div>
 
-          <div class="flipbox face-back" :aria-hidden="!isFlipped">
-            <div class="flipbox-content">
-              <div v-if="hasBack" v-html="flipbox.back"></div>
-              <p v-else class="empty">Nothing on the back yet.</p>
-            </div>
+          <div
+            class="flipbox-content col-start-1 row-start-1 w-70 min-h-45 rotate-y-180 rounded-lg border border-[#d0d7de] bg-white p-4 backface-hidden"
+            :aria-hidden="!isFlipped"
+          >
+            <div v-if="hasBack" v-html="flipbox.back"></div>
+            <p v-else class="m-0 italic opacity-55">Nothing on the back yet.</p>
           </div>
         </div>
       </div>
 
       <button
         type="button"
-        class="flip-button"
+        class="cursor-pointer rounded-md border border-[#d0d7de] bg-white px-4 py-2 font-[inherit] hover:bg-[#f6f8fa]"
         :aria-pressed="isFlipped"
         @click="toggleFlip"
       >
@@ -102,8 +95,6 @@ function toggleFlip() {
   isFlipped.value = !isFlipped.value;
 }
 
-// The rich text editor emits markup like "<p></p>" for an empty document,
-// which is truthy — so strip tags before deciding whether a side is empty.
 function hasContent(html) {
   if (!html) return false;
   return html.replace(/<[^>]*>/g, '').trim().length > 0;
@@ -114,98 +105,25 @@ const hasBack = computed(() => hasContent(props.flipbox.back));
 </script>
 
 <style scoped>
-.flipbox-preview {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 16px;
+.flipbox-content :deep(p) {
+  margin: 0 0 8px;
 }
 
-.preview-controls {
-  align-self: flex-start;
+.flipbox-content :deep(ul),
+.flipbox-content :deep(ol) {
+  margin: 0 0 8px;
+  padding-left: 24px;
 }
 
-.toggle {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  cursor: pointer;
-  user-select: none;
+.flipbox-content :deep(ul) {
+  list-style-type: disc;
 }
 
-.both-sides,
-.single-side {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
+.flipbox-content :deep(ol) {
+  list-style-type: decimal;
 }
 
-.side-indicator {
-  margin: 0;
-}
-
-.scene {
-  perspective: 1000px;
-  cursor: pointer;
-}
-
-.flipbox-card {
-  display: grid;
-  transform-style: preserve-3d;
-  transition: transform 0.5s ease;
-}
-
-.flipbox-card.is-flipped {
-  transform: rotateY(180deg);
-}
-
-/* Both faces share one grid cell so they stack without absolute
-   positioning — the card still grows to fit the taller side. */
-.flipbox-card .flipbox {
-  grid-area: 1 / 1;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-}
-
-.face-back {
-  transform: rotateY(180deg);
-}
-
-.flip-button {
-  padding: 8px 16px;
-  border: 1px solid #d0d7de;
-  border-radius: 6px;
-  background: #fff;
-  font: inherit;
-  cursor: pointer;
-}
-
-.flip-button:hover {
-  background: #f6f8fa;
-}
-
-.empty {
-  margin: 0;
-  opacity: 0.55;
-  font-style: italic;
-}
-
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .flipbox-card {
-    transition: none;
-  }
+.flipbox-content :deep(li) {
+  list-style: inherit;
 }
 </style>

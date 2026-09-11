@@ -1,7 +1,7 @@
 <template>
   <div class="app-shell">
     <header class="app-header">
-      <h1>Flipbox Builder</h1>
+      <h1 class="text-4xl font-bold">Flipbox Builder</h1>
     </header>
     <!--
       Starter layout: builder and preview shown side by side, both driven
@@ -15,12 +15,12 @@
     -->
     <main class="app-main">
       <section class="panel" aria-labelledby="builder-heading">
-        <h2 id="builder-heading">Builder</h2>
+        <h2 id="builder-heading" class="text-3xl font-semibold mb-4">Builder</h2>
         <FlipboxBuilder v-model="flipbox" />
       </section>
 
       <section class="panel" aria-labelledby="preview-heading">
-        <h2 id="preview-heading">Preview</h2>
+        <h2 id="preview-heading" class="text-3xl font-semibold mb-4">Preview</h2>
         <FlipboxPreview :flipbox="flipbox" />
       </section>
     </main>
