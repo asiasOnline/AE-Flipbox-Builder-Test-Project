@@ -1,4 +1,4 @@
-# Flipbox Builder - Starter App
+# Flipbox Builder App
 
 A Vue 3 application for building flipbox cards featuring rich text input and live preview functionality. 
 
