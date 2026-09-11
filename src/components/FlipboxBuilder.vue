@@ -1,12 +1,12 @@
 <template>
-  <div class="flipbox-builder">
+  <div class="flipbox-builder flex flex-col gap-4">
     <div class="field">
-      <label for="front-editor" class="text-xl font-semibold">Front</label>
+      <label for="front-editor" class="mb-1.5 block text-xl font-semibold">Front</label>
       <RichTextEditor id="front-editor" v-model="front" />
     </div>
 
     <div class="field">
-      <label for="back-editor" class="text-xl font-semibold">Back</label>
+      <label for="back-editor" class="mb-1.5 block text-xl font-semibold">Back</label>
       <RichTextEditor id="back-editor" v-model="back" />
     </div>
 
@@ -16,10 +16,11 @@
     <div class="flex items-center gap-3">
       <button
         type="button"
-        class="cursor-pointer rounded-md border border-[#d0d7de] bg-white px-4 py-2 font-[inherit] hover:bg-[#f6f8fa] disabled:cursor-not-allowed disabled:opacity-50"
+        class="cursor-pointer rounded-md border border-red-600 bg-red-200 px-4 py-2 hover:bg-red-300 disabled:cursor-not-allowed disabled:opacity-50"
         :disabled="isEmpty"
         @click="handleReset"
       >
+        <v-icon name="io-trash-outline"/>
         Reset Card Content
       </button>
 
@@ -73,17 +74,3 @@ function handleReset() {
   statusMessage.value = 'Flipbox cleared';
 }
 </script>
-
-<style scoped>
-.flipbox-builder {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.field label {
-  display: block;
-  font-weight: 600;
-  margin-bottom: 6px;
-}
-</style>

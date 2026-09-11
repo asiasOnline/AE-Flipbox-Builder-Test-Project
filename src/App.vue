@@ -3,16 +3,6 @@
     <header class="app-header">
       <h1 class="text-4xl font-bold">Flipbox Builder</h1>
     </header>
-    <!--
-      Starter layout: builder and preview shown side by side, both driven
-      by the same reactive `flipbox` state, so the preview updates live
-      as you edit - no manual save/refresh needed.
-
-      You are free to restructure this (e.g. a toggle between builder and
-      preview "modes" on the same page) as long as the preview still
-      updates live and does not require a separate browser tab or window.
-      See the task spec's "Layout" note under Flipbox component.
-    -->
     <main class="app-main">
       <section class="panel" aria-labelledby="builder-heading">
         <h2 id="builder-heading" class="text-3xl font-semibold mb-4">Builder</h2>
@@ -33,10 +23,6 @@ import { loadFromStorage, saveToStorage } from './composables/usePersistence.js'
 import FlipboxBuilder from './components/FlipboxBuilder.vue';
 import FlipboxPreview from './components/FlipboxPreview.vue';
 
-// TODO: This is a minimal starting shape just so the builder and preview
-// have something to share. Replace or extend it to fit your own data
-// model (e.g. add ids, timestamps, etc.) and wire up persistence as
-// described in the task spec.
 const STORAGE_KEY = 'flipbox-builder:v1';
 
 const DEFAULTS = {

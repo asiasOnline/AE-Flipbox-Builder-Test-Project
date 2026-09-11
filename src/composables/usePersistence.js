@@ -1,11 +1,3 @@
-// A small, generic localStorage helper.
-//
-// This is intentionally low-level plumbing, not a finished persistence
-// solution: you decide the data shape, the storage key(s), and when to
-// save and load. Wire this into FlipboxBuilder.vue (or wherever makes
-// sense in your structure) to satisfy the persistence requirement in the
-// task spec.
-
 export function saveToStorage(key, data) {
   try {
     localStorage.setItem(key, JSON.stringify(data));

@@ -1,13 +1,6 @@
 # Flipbox Builder - Starter App
 
-This is the starter project for the Flipbox Builder developer task. It gives
-you a running Vue 3 + Vite project with TipTap installed and wired up, a
-generic persistence helper, base styling, and empty component shells marked
-with `TODO` comments where your work should go.
-
-Refer to the full task spec for requirements, evaluation priorities, time
-expectations, and submission instructions. This README only covers getting
-the starter running.
+A Vue 3 application for building flipbox cards featuring rich text input and live preview functionality. 
 
 ## Requirements
 
@@ -32,44 +25,24 @@ npm run preview  # preview the production build locally
 
 ```tree
 src/
-  App.vue                        # top-level layout (builder + preview)
+  App.vue                        # top-level layout (builder + preview) and persistence
   main.js
-  style.css
+  style.css                      # Tailwind import and default styling
   components/
-    FlipboxBuilder.vue           # TODO: front/back editing, persistence
-    FlipboxPreview.vue           # TODO: flip interaction, state communication
-    RichTextEditor.vue           # TipTap wiring; TODO: formatting toolbar
+    FlipboxBuilder.vue           # front/back editing and reset control
+    FlipboxPreview.vue           # flip interaction and dual view
+    RichTextEditor.vue           # TipTap editor and formatting toolbar
   composables/
     usePersistence.js            # generic localStorage save/load helper
 ```
 
-## What's already set up for you
+## Features
+**Rich Text Editing** - Each side can be edited using a TipTap editor offering bold, italic, strikethrough, paragraphs, bulleted and numbered lists along with undo/redo actions. By hovering over each toolbar button users can view a corresponding keyboard shortcut in the tooltip along with a indicator setup using `aria`, 
 
-- A running Vue 3 + Vite project, using the Composition API (`<script setup>`).
-- TipTap wired into `RichTextEditor.vue`, including one working example
-  button (Bold) that shows the command pattern.
-- A generic `localStorage` helper in `usePersistence.js` (save/load/clear).
-- Base styling in `style.css`, including a visible focus style for buttons.
-- `App.vue` renders the builder and preview side by side as a starting
-  layout, both driven by the same reactive state so the preview updates
-  live as you edit.
+**Live Preview** - The preview reflects content entered into the builder as it's typed.
 
-## What you need to build
+**Flip Interaction** - The preview area shows one side of the card at a time allowing users to flip between then as desired by utilizing a dynamic button or by clicking the flipbox. A checkbox toggle is also provided so users can switch to view both sides at once.
 
-Look for `TODO` comments in:
+**Persistence** - The contents of the flipbox is saved to `localStorage` meaning content is automatically restored on page load or if the user loses internet connection.
 
-- **`RichTextEditor.vue`** - the formatting toolbar (bold, italic, one list
-  style, undo, redo).
-- **`FlipboxBuilder.vue`** - persistence, and anything else beyond
-  front/back text you choose to add.
-- **`FlipboxPreview.vue`** - the flip interaction itself, and communicating
-  the current side without relying only on the visual animation.
-
-## Restructuring the starter
-
-You're free to restructure components, rename files, add supporting
-packages, or change the layout, as long as the required behavior in the
-task spec is met - including the requirement that the preview update live
-as the flipbox is edited, without a manual save/refresh and without a
-separate browser tab or window. Note any significant changes you make in
-your project summary.
+**Reset** - A reset button is provided allowing users to clear both sides of the flipbox on confirmation. 
